@@ -10,13 +10,13 @@ class CustomFilledIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 90,
-      height: 90,
+      width: 70,
+      height: 70,
       child: FilledButton(
           onPressed: onPress,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-            child: Icon(icons, size: 25,),
+            padding: EdgeInsets.symmetric(horizontal: 1, vertical: 10),
+            child: Icon(icons, size: 15,),
           ),
       style: FilledButton.styleFrom(
         backgroundColor: backgroundColor
