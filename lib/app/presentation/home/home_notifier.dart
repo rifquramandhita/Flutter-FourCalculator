@@ -17,7 +17,23 @@ class HomeNotifier extends BaseProvider {
       _fullInput = _resultInput + param;
       _isDone = false;
     } else {
-      _fullInput += param.toString();
+      if ((param == "+" || param == "×" || param == "÷" || param == '-') &&
+          (_fullInput.endsWith("+-") ||
+              _fullInput.endsWith("--") ||
+              _fullInput.endsWith("×-") ||
+              _fullInput.endsWith("÷-"))) {
+        _fullInput =
+            _fullInput.substring(0, _fullInput.length - 2) + param.toString();
+      } else if ((param == "+" || param == "×" || param == "÷") &&
+          (_fullInput.endsWith("+") ||
+              _fullInput.endsWith("-") ||
+              _fullInput.endsWith("×") ||
+              _fullInput.endsWith("÷"))) {
+        _fullInput =
+            _fullInput.substring(0, _fullInput.length - 1) + param.toString();
+      } else {
+        _fullInput += param.toString();
+      }
     }
     eval();
     notifyListeners();
