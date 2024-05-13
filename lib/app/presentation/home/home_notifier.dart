@@ -14,7 +14,11 @@ class HomeNotifier extends BaseProvider {
 
   addInput(String param) {
     if (_isDone) {
-      _fullInput = _resultInput + param;
+      if(param == '.' && _resultInput.contains('.')){
+        _fullInput = _resultInput;
+      } else{
+        _fullInput = _resultInput + param;
+      }
       _isDone = false;
     } else {
       if ((param == "+" || param == "×" || param == "÷" || param == '-') &&
@@ -28,10 +32,18 @@ class HomeNotifier extends BaseProvider {
           (_fullInput.endsWith("+") ||
               _fullInput.endsWith("-") ||
               _fullInput.endsWith("×") ||
-              _fullInput.endsWith("÷"))) {
+              _fullInput.endsWith("÷") ||
+              _fullInput.endsWith("."))) {
         _fullInput =
             _fullInput.substring(0, _fullInput.length - 1) + param.toString();
-      } else {
+      } else if(param == '.'){
+        List<String> numberArray = _fullInput.split(RegExp(r'[\+\-\×\÷]'));
+        final lastNumber = numberArray[numberArray.length-1];
+        if(!lastNumber.contains(".")){
+          if(lastNumber.isEmpty) _fullInput += '0'+param.toString();
+          else _fullInput += param.toString();
+        }
+      }else {
         _fullInput += param.toString();
       }
     }
