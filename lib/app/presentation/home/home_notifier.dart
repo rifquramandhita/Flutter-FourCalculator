@@ -1,4 +1,5 @@
 import 'package:four_calculator/core/provider/base_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:math_expressions/math_expressions.dart';
 
 class HomeNotifier extends BaseProvider {
@@ -14,10 +15,10 @@ class HomeNotifier extends BaseProvider {
 
   addInput(String param) {
     if (_isDone) {
-      if(param == '.' && _resultInput.contains('.')){
-        _fullInput = _resultInput;
-      } else{
-        _fullInput = _resultInput + param;
+      if (param == '.' && _resultInput.contains('.')) {
+        _fullInput = _resultInput.replaceAll(",", "");
+      } else {
+        _fullInput = _resultInput.replaceAll(",", "") + param;
       }
       _isDone = false;
     } else {
@@ -36,14 +37,16 @@ class HomeNotifier extends BaseProvider {
               _fullInput.endsWith("."))) {
         _fullInput =
             _fullInput.substring(0, _fullInput.length - 1) + param.toString();
-      } else if(param == '.'){
+      } else if (param == '.') {
         List<String> numberArray = _fullInput.split(RegExp(r'[\+\-\×\÷]'));
-        final lastNumber = numberArray[numberArray.length-1];
-        if(!lastNumber.contains(".")){
-          if(lastNumber.isEmpty) _fullInput += '0'+param.toString();
-          else _fullInput += param.toString();
+        final lastNumber = numberArray[numberArray.length - 1];
+        if (!lastNumber.contains(".")) {
+          if (lastNumber.isEmpty)
+            _fullInput += '0' + param.toString();
+          else
+            _fullInput += param.toString();
         }
-      }else {
+      } else {
         _fullInput += param.toString();
       }
     }
@@ -72,6 +75,8 @@ class HomeNotifier extends BaseProvider {
             exp.evaluate(EvaluationType.REAL, ContextModel()).toString();
         if (_resultInput.endsWith(".0"))
           _resultInput = _resultInput.substring(0, _resultInput.length - 2);
+        _resultInput =
+            NumberFormat('#,###.##########').format(double.parse(_resultInput));
       } catch (e) {
         _resultInput = "";
       }
@@ -89,6 +94,7 @@ class HomeNotifier extends BaseProvider {
     return param
         .replaceAll("×", "*")
         .replaceAll("÷", "/")
-        .replaceAll('%', '/100');
+        .replaceAll('%', '/100')
+        .replaceAll(',', '');
   }
 }
